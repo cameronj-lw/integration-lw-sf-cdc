@@ -8,6 +8,7 @@ With some minor LW tweaks:
     -log rather than print
     -remove self param in subscribe call to callback
     -connect to SF using REST API oauth (add client ID and secret to facilitate this)
+    -support timeout_sec in subscribe to return if no messages are found after this long
 
 This file defines the class `PubSub`, which contains common functionality for
 both publisher and subscriber clients.
@@ -129,7 +130,7 @@ class PubSub(object):
                          ('tenantid', self.tenant_id),  # TODO: get tenant ID?
         )
 
-        logging.info(f'Result from PubSub auth: {result}')
+        logging.debug(f'Result from PubSub auth: {result}')
         return result
 
     def auth_orig(self):
@@ -155,7 +156,7 @@ class PubSub(object):
             self.url = "{}://{}".format(url_parts.scheme, url_parts.netloc)
             self.session_id = res_xml[4].text
         except IndexError:
-            print("An exception occurred. Check the response XML below:",
+            logging.exception("An exception occurred. Check the response XML below:",
             res.__dict__)
 
         # Get org ID from UserInfo
@@ -203,7 +204,7 @@ class PubSub(object):
         while True:
             # Only send FetchRequest when needed. Semaphore release indicates need for new FetchRequest
             self.semaphore.acquire()
-            print("Sending Fetch Request")
+            logging.debug("Sending Fetch Request")
             yield self.make_fetch_request(topic, replay_type, replay_id, num_requested)
 
     def encode(self, schema, payload):
@@ -277,7 +278,7 @@ class PubSub(object):
         }
         return [req]
 
-    def subscribe(self, topic, replay_type, replay_id, num_requested, callback):
+    def subscribe(self, topic, replay_type, replay_id, num_requested, callback, timeout_sec=None):
         """
         Calls the Subscribe RPC defined in the proto file and accepts a
         client-defined callback to handle any events that are returned by the
@@ -286,10 +287,15 @@ class PubSub(object):
         designed and may not be necessary for other languages--Java, for
         example, does not need this).
         """
-        sub_stream = self.stub.Subscribe(self.fetch_req_stream(topic, replay_type, replay_id, num_requested), metadata=self.metadata)
-        print("> Subscribed to", topic)
-        for event in sub_stream:
-            callback(event)
+        logging.debug(f"> Subscribing to {topic}...")
+        while True:
+            sub_stream = self.stub.Subscribe(
+                self.fetch_req_stream(topic, replay_type, replay_id, num_requested),
+                metadata=self.metadata,
+                timeout=timeout_sec,
+            )
+            for event in sub_stream:
+                callback(event)
 
     def publish(self, topic_name, schema, schema_id):
         """

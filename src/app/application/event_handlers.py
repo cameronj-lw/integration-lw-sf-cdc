@@ -1,6 +1,7 @@
 
 # core python
 from dataclasses import dataclass
+import logging
 import random
 
 # native
@@ -15,6 +16,7 @@ class PortfolioEventHandler(EventHandler):
     target_portfolio_repos: list[PortfolioRepository]  # Where to save the latest version of this portfolio
 
     def handle(self, event: PortfolioCreatedEvent|PortfolioUpdatedEvent|PortfolioDeletedEvent) -> int|None:
+        logging.debug(f'{self.cn} handling event with Portfolio {event.portfolio}')
         # TODO: Actually do something here. Return False for fail or True for success.
 
         # Randomly succeed or fail (coinflip)
