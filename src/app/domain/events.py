@@ -4,7 +4,7 @@ from abc import ABC
 from dataclasses import dataclass
 
 # native
-from domain.models import Portfolio
+from domain.entities import Portfolio
 
 
 class Event(ABC):

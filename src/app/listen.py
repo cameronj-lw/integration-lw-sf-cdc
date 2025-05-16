@@ -11,7 +11,7 @@ sys.path.append(src_dir)
 
 # native
 from application.event_handlers import PortfolioEventHandler
-from infrastructure.models import SFListenerMode
+from infrastructure.entities import SFListenerMode
 from infrastructure.message_subscribers import SalesforcePubSubListener
 from infrastructure.sql_repositories import (
     COREDBReplayIDRepository, 

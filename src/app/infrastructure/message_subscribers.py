@@ -11,10 +11,10 @@ from domain.events import (
 )
 from domain.event_handlers import EventHandler
 from domain.message_subscribers import MessageSubscriber
-from domain.models import Portfolio
+from domain.entities import Portfolio
 from domain.repositories import HeartbeatRepository, ReplayIDRepository
 from infrastructure.message_brokers import SalesforcePubSubAPIMessageBroker
-from infrastructure.models import SFListenerMode
+from infrastructure.entities import SFListenerMode
 from infrastructure.util.ChangeEventHeaderUtility import process_bitmap
 from infrastructure.util.config import AppConfig
 from infrastructure.util.logging import get_log_file_name

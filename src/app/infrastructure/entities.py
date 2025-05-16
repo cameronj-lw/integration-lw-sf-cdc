@@ -8,7 +8,7 @@ import socket
 from typing import Any, Callable, Dict, List, Type, Union
 
 # native
-from domain.models import Heartbeat
+from domain.entities import Heartbeat
 from infrastructure.util.date import format_time
 from infrastructure.util.logging import get_log_file_full_path
 

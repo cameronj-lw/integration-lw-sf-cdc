@@ -7,7 +7,7 @@ import random
 # native
 from domain.event_handlers import EventHandler
 from domain.events import (Event, PortfolioCreatedEvent, PortfolioUpdatedEvent, PortfolioDeletedEvent)
-from domain.models import Portfolio
+from domain.entities import Portfolio
 from domain.repositories import PortfolioRepository
 
 

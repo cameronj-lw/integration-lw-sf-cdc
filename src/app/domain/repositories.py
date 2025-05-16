@@ -6,7 +6,7 @@ import datetime
 from typing import Any, Dict, List, Tuple, Union
 
 # native
-from domain.models import Heartbeat, Portfolio
+from domain.entities import Heartbeat, Portfolio
 
 
 class PortfolioRepository(ABC):

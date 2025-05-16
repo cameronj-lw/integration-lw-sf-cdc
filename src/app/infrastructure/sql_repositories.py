@@ -5,9 +5,9 @@ import logging
 import os
 
 # native
-from domain.models import Heartbeat
+from domain.entities import Heartbeat
 from domain.repositories import HeartbeatRepository, ReplayIDRepository
-from infrastructure.models import MGMTDBHeartbeat
+from infrastructure.entities import MGMTDBHeartbeat
 from infrastructure.sql_tables import COREDBSFReplayIDTable, MGMTDBMonitorTable
 
 
