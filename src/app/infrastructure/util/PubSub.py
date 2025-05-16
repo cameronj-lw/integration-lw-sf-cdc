@@ -127,7 +127,7 @@ class PubSub(object):
         # Set metadata headers
         self.metadata = (('accesstoken', self.session_id),
                          ('instanceurl', self.instance_url),
-                         ('tenantid', self.tenant_id),  # TODO: get tenant ID?
+                         ('tenantid', self.tenant_id),
         )
 
         logging.debug(f'Result from PubSub auth: {result}')

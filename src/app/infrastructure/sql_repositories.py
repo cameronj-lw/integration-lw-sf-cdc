@@ -77,8 +77,9 @@ class COREDBReplayIDRepository(ReplayIDRepository):
     def create(self, topic: str, replay_id: int) -> int:
         replay_id_dict = {
             'topic': topic,
+            'consumer_group': os.environ.get('APP_NAME'),
             'replay_id': replay_id,
-            'modified_by': os.environ.get('APP_NAME'),
+            'modified_by': os.environ.get('APP_NAME') or os.path.basename(__file__),
             'modified_at': datetime.datetime.now(),
         }
         # insert new replay_id:
@@ -93,8 +94,8 @@ class COREDBReplayIDRepository(ReplayIDRepository):
         logging.debug(f'End of {self.cn} create: {replay_id_dict}')
         return row_cnt
 
-    def get(self, topic: str) -> int:
-        return self.table.latest_replay_id(topic=topic)
+    def get(self, topic: str, consumer_group: str|None=None) -> int:
+        return self.table.latest_replay_id(topic=topic, consumer_group=consumer_group)
 
     def __str__(self):
         return str(self.table)

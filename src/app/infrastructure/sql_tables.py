@@ -87,7 +87,7 @@ class COREDBSFReplayIDTable(BaseTable):
     config_section = 'coredb'
     table_name = 'sf_replay_id'
 
-    def read(self, topic: str|None=None):
+    def read(self, topic: str|None=None, consumer_group: str|None=None):
         """
         Read all entries, optionally with criteria
 
@@ -96,15 +96,17 @@ class COREDBSFReplayIDTable(BaseTable):
         stmt = sql.select(self.table_def)
         if topic is not None:
             stmt = stmt.where(self.c.topic == topic)
+        if consumer_group is not None:
+            stmt = stmt.where(self.c.consumer_group == consumer_group)
         return self.execute_read(stmt)
 
-    def latest_replay_id(self, topic: str|None=None) -> int:
+    def latest_replay_id(self, topic: str|None=None, consumer_group: str|None=None) -> int:
         """
         Get the highest replay_id, or None if there is none found
 
         :return: DataFrame
         """
-        res_df = self.read(topic=topic)
+        res_df = self.read(topic=topic, consumer_group=consumer_group)
         if len(res_df):
             return res_df['replay_id'].max()
         else:

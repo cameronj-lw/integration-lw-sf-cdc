@@ -46,7 +46,7 @@ class ReplayIDRepository(ABC):
         pass
 
     @abstractmethod
-    def get(self) -> int:
+    def get(self, topic: str, consumer_group: str|None=None) -> int:
         pass
 
     @property
